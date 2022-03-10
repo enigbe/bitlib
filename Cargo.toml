@@ -16,3 +16,5 @@ name = "bitlib"
 
 [dependencies]
 num-bigint = "0.4.3"
+num-integer = "0.1.44"
+num-traits = "0.2.14"
