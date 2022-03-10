@@ -6,4 +6,15 @@ author = "Enigbe OS<enigbeos@gmail.com>"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+path = "src/ecc.rs"
+name = "ecc"
+
+[[bin]]
+path = "src/main.rs"
+name = "bitlib"
+
 [dependencies]
+num-bigint = "0.4.3"
+num-integer = "0.1.44"
+num-traits = "0.2.14"
