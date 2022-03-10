@@ -82,26 +82,26 @@ impl<'prime> Mul for FieldElement<'prime> {
     }
 }
 
-// /// Implement division trait for FieldElement
-// impl Div for FieldElement {
-//     type Output = Result<FieldElement, ECCError>;
+/// Implement division trait for FieldElement
+impl<'prime> Div for FieldElement<'prime> {
+    type Output = Result<FieldElement<'prime>, ECCError>;
 
-//     fn div(self, rhs: Self) -> Self::Output {
-//         if self.prime != rhs.prime {
-//             let error_message = "Cannot divide two number in different fields".to_owned();
-//             Err(ECCError::TypeError(error_message))
-//         } else {
+    fn div(self, rhs: Self) -> Self::Output {
+        if self.prime != rhs.prime {
+            let error_message = "Cannot divide two number in different fields".to_owned();
+            Err(ECCError::TypeError(error_message))
+        } else {
 
-//             let exponent = rhs.num.modpow(&(&self.prime - BigInt::from(2_u32)), &self.prime);
-//             let num = self.num.mul(exponent).mod_floor(&self.prime);
+            let exponent = rhs.num.modpow(&(self.prime - BigInt::from(2_u32)), &self.prime);
+            let num = self.num.mul(exponent).mod_floor(&self.prime);
 
-//             Ok(FieldElement{
-//                 num,
-//                 prime: self.prime,
-//             })
-//         }
-//     }
-// }
+            Ok(FieldElement{
+                num,
+                prime: self.prime,
+            })
+        }
+    }
+}
 
 
 /// Implement methods for FieldElement

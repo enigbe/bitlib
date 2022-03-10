@@ -87,16 +87,16 @@ fn test_subtract_two_field_element() {
 #[test]
 fn test_multiply_two_field_elements() {
     // arrange
-   let num_1 = BigInt::from(5_u32);
-   let num_2 = BigInt::from(5_u32);
-   let prime_1 = BigInt::from(19_u32);
+    let num_1 = BigInt::from(5_u32);
+    let num_2 = BigInt::from(5_u32);
+    let prime_1 = BigInt::from(19_u32);
 
-   // act
-   let fe_1 = FieldElement::new(num_1, &prime_1).unwrap();
-   let fe_2 = FieldElement::new(num_2, &prime_1).unwrap();
-   let expected = FieldElement::new(BigInt::from(6_u32), &prime_1).unwrap();
+    // act
+    let fe_1 = FieldElement::new(num_1, &prime_1).unwrap();
+    let fe_2 = FieldElement::new(num_2, &prime_1).unwrap();
+    let expected = FieldElement::new(BigInt::from(6_u32), &prime_1).unwrap();
 
-   let mul = fe_1 * fe_2;
+    let mul = fe_1 * fe_2;
 
     match mul {
         Ok(res) => {
@@ -120,19 +120,25 @@ fn test_multiply_two_field_elements() {
 
 // }
 
-// /// test the division of a FieldElement with another
-// #[test]
-// fn test_division_of_two_field_elements() {
-//     let fe_1 = FieldElement::new(5, 19).unwrap();
-//     let fe_2 = FieldElement::new(17, 19).unwrap();
-//     let expected = FieldElement::new(7, 19).unwrap();
+/// test the division of a FieldElement with another
+#[test]
+fn test_division_of_two_field_elements() {
+     // arrange
+   let num_1 = BigInt::from(5_u32);
+   let num_2 = BigInt::from(5_u32);
+   let prime_1 = BigInt::from(19_u32);
 
-//     let div = fe_1 / fe_2;
+   // act
+   let fe_1 = FieldElement::new(num_1, &prime_1).unwrap();
+   let fe_2 = FieldElement::new(num_2, &prime_1).unwrap();
+   let expected = FieldElement::new(BigInt::from(1_u32), &prime_1).unwrap();
 
-//     match div {
-//         Ok(res) => {
-//             assert_eq!(res, expected);
-//         },
-//         Err(_e) => (),
-//     }
-// }
+   let div = fe_1 / fe_2;
+
+    match div {
+        Ok(res) => {
+            assert_eq!(res, expected);
+        },
+        Err(_e) => (),
+    }
+}
