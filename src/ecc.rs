@@ -45,23 +45,24 @@ impl<'prime> Add for FieldElement<'prime> {
     }
 }
 
-// /// Implements subtraction trait for FieldElement
-// impl Sub for FieldElement {
-//     type Output = Result<FieldElement, ECCError>;
+/// Implements subtraction trait for FieldElement
+impl<'prime> Sub for FieldElement<'prime> {
+    type Output = Result<FieldElement<'prime>, ECCError>;
 
-//     fn sub(self, rhs: Self) -> Self::Output {
-//         if self.prime != rhs.prime {
-//             let error_message = "Cannot subtract two elements in different fields".to_owned();
-//             Err(ECCError::TypeError(error_message))
-//         } else {
-//             let num = self.num.sub(rhs.num).mod_floor(&self.prime);
-//             Ok(FieldElement {
-//                 num,
-//                 prime: self.prime,
-//             })
-//         }
-//     }
-// }
+    fn sub(self, rhs: Self) -> Self::Output {
+        if self.prime != rhs.prime {
+            let error_message = "Cannot subtract two elements in different fields".to_owned();
+            Err(ECCError::TypeError(error_message))
+        } else {
+            let num = self.num.sub(rhs.num).mod_floor(&self.prime);
+            
+            Ok(FieldElement {
+                num,
+                prime: &self.prime,
+            })
+        }
+    }
+}
 
 // /// Implement multiplication trait for FieldElement
 // impl Mul for FieldElement {

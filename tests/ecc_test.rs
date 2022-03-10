@@ -59,25 +59,29 @@ fn test_add_two_field_element() {
     }
 }
 
-// /// test the subtraction of two field elements
-// #[test]
-// fn test_subtract_two_field_element() {
-//     // set up
-//     let fe_1 = FieldElement::new(5, 19).unwrap();
-//     let fe_2 = FieldElement::new(7, 19).unwrap();
-//     let expected = FieldElement::new(17, 19).unwrap();
+/// test the subtraction of two field elements
+#[test]
+fn test_subtract_two_field_element() {
+   // arrange
+   let num_1 = BigInt::from(5_u32);
+   let num_2 = BigInt::from(5_u32);
+   let prime_1 = BigInt::from(19_u32);
 
-//     // act
-//     let diff = fe_1 - fe_2;
+   // act
+   let fe_1 = FieldElement::new(num_1, &prime_1).unwrap();
+   let fe_2 = FieldElement::new(num_2, &prime_1).unwrap();
+   let expected = FieldElement::new(BigInt::from(0_u32), &prime_1).unwrap();
 
-//     match diff {
-//         Ok(res) => {
-//             assert_eq!(res, expected);
-//         },
-//         Err(_e) => (),
-//     }
+   let diff = fe_1 - fe_2;
 
-// }
+    match diff {
+        Ok(res) => {
+            assert_eq!(res, expected);
+        },
+        Err(_e) => (),
+    }
+
+}
 
 // /// test the multiplication of two field elements
 // #[test]
