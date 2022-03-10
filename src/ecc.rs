@@ -120,17 +120,17 @@ impl<'prime>  FieldElement<'prime> {
         }
     }
 
-    // // / Raise the power of the FieldElement to the given exponent
-    // pub fn pow(&self, exponent: BigInt) -> Self {
-    //     let fermat_exp = &self.prime - BigInt::from(1_u32);
-    //     let n = exponent.mod_floor(&fermat_exp);
-    //     let num = self.num.modpow(&n, &self.prime);
+    // / Raise the power of the FieldElement to the given exponent
+    pub fn pow(&self, exponent: BigInt) -> Self {
+        let fermat_exp = self.prime - BigInt::from(1_u32);
+        let n = exponent.mod_floor(&fermat_exp);
+        let num = self.num.modpow(&n, &self.prime);
 
-    //     FieldElement {
-    //         num,
-    //         prime: self.prime,
-    //     }
-    // }
+        FieldElement {
+            num,
+            prime: self.prime,
+        }
+    }
 }
 
 /// Modulo workaround: Helper function to compute the modulo that wraps around

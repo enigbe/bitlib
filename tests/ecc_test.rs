@@ -107,18 +107,26 @@ fn test_multiply_two_field_elements() {
     }
 }
 
-// /// test the exponentiation of a FieldElement to a given exponent
-// #[test]
-// fn test_raise_field_element_to_power() {
-//     // arrange
-//     let exp = BigInt::from(-5_i32);
-//     let fe_1 = FieldElement::new(5, 7).unwrap();
-//     let expected = FieldElement::new(5, 7).unwrap();
+/// test the exponentiation of a FieldElement to a given exponent
+#[test]
+fn test_raise_field_element_to_power() {
+    // arrange
+    let num_1 = BigInt::from(5_u32);
+    let num_2 = BigInt::from(5_u32);
+    let prime_1 = BigInt::from(19_u32);
 
-//     // act
-//     let pow = fe_1 ^ exp;
+    // act
+    let fe_1 = FieldElement::new(num_1, &prime_1).unwrap();
+    let fe_2 = FieldElement::new(num_2, &prime_1).unwrap();
+    let expected = FieldElement::new(BigInt::from(9_u32), &prime_1).unwrap();
+    let exp = BigInt::from(500_u32);
 
-// }
+    let pow = fe_1.pow(exp);
+
+    // assert 
+    assert_eq!(pow, expected);
+
+}
 
 /// test the division of a FieldElement with another
 #[test]
