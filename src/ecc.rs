@@ -64,23 +64,23 @@ impl<'prime> Sub for FieldElement<'prime> {
     }
 }
 
-// /// Implement multiplication trait for FieldElement
-// impl Mul for FieldElement {
-//     type Output = Result<FieldElement, ECCError>;
+/// Implement multiplication trait for FieldElement
+impl<'prime> Mul for FieldElement<'prime> {
+    type Output = Result<FieldElement<'prime>, ECCError>;
     
-//     fn mul(self, rhs: Self) -> Self::Output {
-//         if self.prime != rhs.prime {
-//             let error_message = "Cannot multiply two number in different fields".to_owned();
-//             Err(ECCError::TypeError(error_message))
-//         } else {
-//             let num = self.num.mul(rhs.num).mod_floor(&self.prime);
-//             Ok(FieldElement {
-//                 num,
-//                 prime: self.prime,
-//             })
-//         }
-//     }
-// }
+    fn mul(self, rhs: Self) -> Self::Output {
+        if self.prime != rhs.prime {
+            let error_message = "Cannot multiply two number in different fields".to_owned();
+            Err(ECCError::TypeError(error_message))
+        } else {
+            let num = self.num.mul(rhs.num).mod_floor(&self.prime);
+            Ok(FieldElement {
+                num,
+                prime: &self.prime,
+            })
+        }
+    }
+}
 
 // /// Implement division trait for FieldElement
 // impl Div for FieldElement {
