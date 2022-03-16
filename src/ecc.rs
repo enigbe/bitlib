@@ -6,7 +6,7 @@ use num_integer::Integer;
 use num_traits::Pow;
 
 /// A element belonging to a finite set of prime order
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct FieldElement<'prime> {
     pub num: BigInt,
     pub prime: &'prime BigInt,
@@ -140,3 +140,116 @@ fn modulus(a: BigInt, b: BigInt) -> BigInt {
     modu
 }
 
+/// Point on an elliptic curve
+#[derive(Debug, PartialEq)]
+pub struct Point<'prime> {
+    pub x: Option<FieldElement<'prime>>,
+    pub y: Option<FieldElement<'prime>>,
+    pub a: FieldElement<'prime>,
+    pub b: FieldElement<'prime>,
+}
+
+/// Implements methods for Point
+impl<'prime> Point<'prime> {
+    /// Creates a new Point object
+    /// # Args:
+    /// x (FieldElement) representing the x-coordinate
+    /// y (FieldElement) representing the y-coordinate
+    /// a (FieldElement) representing the x-coordinate coefficient 'a'
+    /// b (FieldElement) representing the constant 'b'
+    /// # Returns:
+    /// Point object
+    pub fn new(x: FieldElement<'prime>, y: FieldElement<'prime>, a: FieldElement<'prime>, b: FieldElement<'prime>) -> Result<Self, ECCError> {
+        // 1. Create point
+        let point = Point{ 
+            x: Some(x), 
+            y: Some(y), 
+            a, 
+            b, 
+        };
+        // 2. Check if it point at infinity and is valid, return point if true
+        if is_inf(&point) || is_valid(&point) {
+            return Ok(point)
+        } else {
+            let err_msg = format!("Point ({}) is not on the curve", point);
+            return Err(ECCError::ValueError(err_msg));
+        }
+    }
+}
+
+/// Implements display for Point
+impl<'prime> Display for Point<'prime> {
+    fn fmt(&self, f: &mut Formatter<'_>) -> FmtResult {
+        write!(
+            f, 
+            "Point_[x: {:?}, y: {:?}]_[a: {}, b: {}]", 
+            self.x, 
+            self.y,
+            self.a,
+            self.b
+        )
+    }
+}
+
+/// Checks if the Point object is at the point of infinity
+fn is_inf(point: &Point) -> bool {
+    let mut xp = point.x.as_ref();
+    let mut yp = point.y.as_ref();
+
+    match xp {
+        Some(_x) => (),
+        None => { xp = None},
+    }
+
+    match yp {
+        Some(_y) => (),
+        None => { yp = None},
+    }
+
+    if xp == None && yp == None {
+        true
+    } else {
+        false
+    }
+}
+
+/// Checks if the Point object lies on the elliptic curve
+fn is_valid(point: &Point) -> bool {
+    let xp = point.x.clone();
+    let yp = point.y.clone();
+
+    match xp {
+        Some(x) => {
+            match yp {
+                Some(y) => {
+                    let y_sq = y.pow(BigInt::from(2_u32));
+                    let ax = (point.a.clone() * x.clone()).unwrap();
+                    let b = point.b.clone();
+                    let x_cube = x.clone().pow(BigInt::from(3_u32));
+
+                    if y_sq == addition(&addition(&x_cube, &ax), &b) {
+                        true
+                    } else {
+                        false
+                    }
+
+                },
+                None => {true},
+            }
+        },
+        None => {true},
+    }
+}
+
+/// FieldElement addition that returns only a FieldElement
+/// # Args:
+/// fe_1: FieldElement 
+/// fe_2: FieldElement
+/// 
+/// # Returns:
+/// fe_3: FieldElement that is the sum of fe_1 and fe_2
+fn addition<'p>(fe_1: &'p FieldElement<'p>, fe_2: &'p FieldElement<'p>) -> FieldElement<'p> {
+    let sum = (fe_1.clone() + fe_2.clone()).unwrap();
+
+    sum
+}
