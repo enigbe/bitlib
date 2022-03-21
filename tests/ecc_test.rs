@@ -200,3 +200,23 @@ fn test_create_infinity_point() {
         Err(_) => (),
     }
 }
+
+/// test point equality
+#[test]
+fn test_point_equality() {
+    let x = BigInt::from(192_u32);
+    let y = BigInt::from(105_u32);
+    let a = BigInt::from(0_u32);
+    let b = BigInt::from(7_u32);
+    let prime = BigInt::from(223_u32);
+
+    let fe_x = FieldElement::new(x, &prime).unwrap();
+    let fe_y = FieldElement::new(y, &prime).unwrap();
+    let fe_a = FieldElement::new(a, &prime).unwrap();
+    let fe_b = FieldElement::new(b, &prime).unwrap();
+
+    let point_a = Point::new(Some(fe_x.clone()), Some(fe_y.clone()), fe_a.clone(), fe_b.clone()).unwrap();
+    let point_b = Point::new(Some(fe_x.clone()), Some(fe_y.clone()), fe_a.clone(), fe_b.clone()).unwrap();
+
+    assert_eq!(point_a, point_b);
+}
