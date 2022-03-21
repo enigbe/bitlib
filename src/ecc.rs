@@ -3,7 +3,7 @@ use std::fmt::{Display, format, Formatter, Result as FmtResult};
 use std::ops::{Add, Sub, Mul, Div};
 use num_bigint::{BigInt, BigUint};
 use num_integer::Integer;
-use num_traits::Pow;
+use std::convert::From;
 
 /// A element belonging to a finite set of prime order
 #[derive(Clone, Debug, PartialEq)]
@@ -159,17 +159,11 @@ impl<'prime> Point<'prime> {
     /// b (FieldElement) representing the constant 'b'
     /// # Returns:
     /// Point object
-    pub fn new(x: FieldElement<'prime>, y: FieldElement<'prime>, a: FieldElement<'prime>, b: FieldElement<'prime>) -> Result<Self, ECCError> {
-        // 1. Create point
-        let point = Point{ 
-            x: Some(x), 
-            y: Some(y), 
-            a, 
-            b, 
-        };
-        // 2. Check if it point at infinity and is valid, return point if true
+    
+    pub fn new(x: Option<FieldElement<'prime>>, y: Option<FieldElement<'prime>>, a: FieldElement<'prime>, b: FieldElement<'prime>) -> Result<Self, ECCError> {
+        let point = Point {x, y, a, b };
         if is_inf(&point) || is_valid(&point) {
-            return Ok(point)
+            return Ok(point);
         } else {
             let err_msg = format!("Point ({}) is not on the curve", point);
             return Err(ECCError::ValueError(err_msg));

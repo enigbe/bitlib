@@ -165,7 +165,7 @@ fn test_create_valid_point() {
     let fe_a = FieldElement::new(a, &prime).unwrap();
     let fe_b = FieldElement::new(b, &prime).unwrap();
 
-    let point = Point::new(fe_x, fe_y, fe_a, fe_b);
+    let point = Point::new(Some(fe_x), Some(fe_y), fe_a, fe_b);
 
     match point {
         Ok(pt) => {
@@ -175,3 +175,28 @@ fn test_create_valid_point() {
     }
 }
 
+/// test the creation of the point at infinity
+#[test] 
+fn test_create_infinity_point() {
+    let x = BigInt::from(192_u32);
+    let y = BigInt::from(105_u32);
+    let a = BigInt::from(0_u32);
+    let b = BigInt::from(7_u32);
+    let prime = BigInt::from(223_u32);
+
+    let fe_x: Option<FieldElement> = None;
+    let fe_y: Option<FieldElement> = None;
+    let fe_a = FieldElement::new(a, &prime).unwrap();
+    let fe_b = FieldElement::new(b, &prime).unwrap();
+
+    let point = Point::new(None, None, fe_a, fe_b);
+
+    match point {
+        Ok(pt) => {
+            let pt_a = pt.a;
+            assert_eq!(*pt_a.prime, BigInt::from(223_u32));
+            assert_eq!(pt_a.num, BigInt::from(0_u32));
+        },
+        Err(_) => (),
+    }
+}
